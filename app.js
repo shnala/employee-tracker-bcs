@@ -14,12 +14,52 @@ const employees = [];
 const roles = [];
 const departments = [];
 
-const start = () => {  
+const start = async () => {
+    //Pushes all currently listed employees into employees array.
+    db.query('SELECT employee.first_name, employee.last_name, employee.id FROM employee', (err,data) => {
+        if(err){
+            throw err;
+          }
+          employees.push(data);
+        //   The console.log below will grab the second employee out of the employees array. For some reason, the array is nested inside of another array. Maybe do a map method so that this doesn't occur?
+        // Use this information to add create functionality for the 'update employee' option.
+          console.log(employees[0][1]);
+    });
+
+    //Pushes all currently listed roles into roles array.
+    db.query('SELECT role.title, role.salary, role.id FROM role', (err,data) => {
+        if(err){
+            throw err;
+          }
+          roles.push(data);
+    });
+
+    //Pushes all currently listed departments into departments array.
+    db.query('SELECT department.name, department.id FROM department', (err,data) => {
+        if(err){
+            throw err;
+          }
+          departments.push(data);
+    });
+
+    const response = await inquirer
+    .prompt([
+        {
+            type: 'list',
+            message: "Welcome to Employee Tracker! You can create and manage dataset tables for all of your employees' information using this app. To begin, press 'Enter.'",
+            choices: ["Enter"],
+            name: 'choice'
+        }
+    ])
+    await menu(response);
+}
+
+const menu = () => {
     inquirer
     .prompt([
         {
             type: 'list',
-            message: "Welcome to Employee Tracker! Use the arrow keys to select one of the options below and then hit 'enter.'",
+            message: "Use the arrow keys to select an option below and then hit 'enter.' When you are finished viewing a table, pressing the arrow keys will re-open this menu. When you are finished using the app, select 'Finish.'",
             choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Department", "Add a Role", "Add an Employee", "Update an Employee Role", "Finish"],
             name: 'choice'
         }
@@ -48,7 +88,7 @@ const start = () => {
                 updateEmployee();
                 break;
             default:
-                // generate(employees);
+                db.end();
                 return;
         }
     })
@@ -62,12 +102,9 @@ const viewDepartments = () => {
           console.log('\n');
           console.table(data);
     })
-    // db.end();
-    start();
+    menu();
 };
 
-// WHEN I choose to view all roles
-// THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role (SORTA DONE)
 
 const viewRoles = () => {
     db.query('SELECT role.title, role.id AS role_id, department.name AS department_name, role.salary FROM role JOIN department ON role.department_id = department.id', (err,data) => {
@@ -77,8 +114,7 @@ const viewRoles = () => {
           console.log('\n');
           console.table(data);
     })
-    // db.end();
-    start();
+    menu();
 };
 
 const viewEmployees = () => {
@@ -89,8 +125,7 @@ const viewEmployees = () => {
           console.log('\n');
           console.table(data);
     })
-    // db.end();
-    start();
+    menu();
 };
 
 
@@ -107,7 +142,7 @@ const addDepartment = () => {
         db.query("INSERT INTO department SET ?", {name: response.name}, (err, data) => {
             if (err) throw err;
             console.log(`Department ${response.name} has been added.`)
-            start();
+            menu();
         })
 
     })
@@ -142,7 +177,7 @@ const addRole = () => {
         }, (err, data) => {
             if (err) throw err;
             console.log(`A role for ${response.title} has been added.`)
-            start();
+            menu();
         })
     })
 };
@@ -182,23 +217,44 @@ const addEmployee = () => {
         db.query("INSERT INTO employee SET ?", newEmployee, (err, data) => {
             if (err) throw err;
             console.log(`${response.first_name} ${response.last_name} has been added as an employee.`)
-            start();
+            menu();
         })
     })
 };
 
+//TODO: This function is incomplete. The choices for the prompt come back as 'undefined'
 const updateEmployee = () => {
     inquirer
     .prompt([
         {
             type: 'list',
             message: "Please select an employee to update.",
-            choices: employees, 
+            choices: employees[0], 
             name: 'choice'
         }
     ]).then((response) => {
         console.log(response);
+        console.log(`Updating ${response}`);
+        updateInput(response);
     })
 };
 
+//TODO: this function is incomplete. First figure out the employees array so that an employee can be selected.
+const updateInput = (id) => {
+    console.log(id);
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: "Please enter the new role id for this employee.",
+            name: 'role_id'
+        }
+    ]).then((response) => {
+        console.log(`Updating ${response}`);
+        updateInput();
+    })
+
+}
+
+//Initialize the app.
 start();
