@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/shnala/employee-tracker-bcs#readme",
   "dependencies": {
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.2.5"
   }
 }
