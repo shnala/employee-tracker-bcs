@@ -15,7 +15,7 @@ const start = () => {
     .prompt([
         {
             type: 'list',
-            message: "Welcome to Employee Tracker! You may generate a neatly organized table of all your employees using this app. To begin, please select one of the options below.",
+            message: "Welcome to Employee Tracker! Use the arrow keys to select one of the options below and then hit 'enter.'",
             choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Department", "Add a Role", "Add an Employee", "Update an Employee Role", "Finish"],
             name: 'choice'
         }
@@ -45,7 +45,7 @@ const start = () => {
             //     break;
             default:
                 // generate(employees);
-                console.log('ok');
+                return;
         }
     })
 };
@@ -62,8 +62,11 @@ const viewDepartments = () => {
     start();
 };
 
+// WHEN I choose to view all roles
+// THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role (SORTA DONE)
+
 const viewRoles = () => {
-    db.query("SELECT * FROM role", (err,data) => {
+    db.query('SELECT role.title, role.id AS role_id, department.name AS department_name, role.salary FROM role JOIN department ON role.department_id = department.id', (err,data) => {
         if(err){
             throw err;
           }
@@ -74,7 +77,7 @@ const viewRoles = () => {
     start();
 };
 const viewEmployees = () => {
-    db.query("SELECT * FROM employee", (err,data) => {
+    db.query("SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.title AS job_title, role.salary, employee.manager_id, department.name AS department_name FROM employee JOIN role ON employee.role_id = role.department_id JOIN department ON role.department_id = department.id", (err,data) => {
         if(err){
             throw err;
           }
