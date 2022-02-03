@@ -14,6 +14,7 @@ const employees = [];
 const roles = [];
 const departments = [];
 
+// The 'start' function will initialize the app by first readying a series of arrays that will be used later during the inquirer prompts.
 const start = async () => {
     //Pushes all currently listed employees into employees array.
     db.query('SELECT employee.first_name, employee.last_name, employee.id FROM employee', (err,data) => {
@@ -51,6 +52,7 @@ const start = async () => {
     await menu(response);
 }
 
+// Core loop function.
 const menu = () => {
     inquirer
     .prompt([
@@ -115,7 +117,7 @@ const viewRoles = () => {
 };
 
 const viewEmployees = () => {
-    db.query("SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.title AS job_title, role.salary, employee.manager_id, department.name AS department_name FROM employee JOIN role ON employee.role_id = role.department_id JOIN department ON role.department_id = department.id", (err,data) => {
+    db.query("SELECT employee.id AS employee_id, CONCAT(employee.first_name, ' ', employee.last_name) AS Employee, role.title AS job_title, role.salary, employee.manager_id, department.name AS department_name FROM employee JOIN role ON employee.role_id = role.department_id JOIN department ON role.department_id = department.id", (err,data) => {
         if(err){
             throw err;
           }
@@ -144,12 +146,10 @@ const addDepartment = () => {
 
 };
 
-//TODO: On the third input, make a list of departments for the user to select from, and then use the corresponding integer id in the db.query.
 const addRole = () => {
     const departmentArr = departments[0].map(function (department) {
         return { name: department.name, value: department.id };
     });
-    console.log(departmentArr);
 
     inquirer
     .prompt([
@@ -232,7 +232,7 @@ const updateEmployee = () => {
     const employeesArr = employees[0].map(function (employee) {
         return { name: employee.last_name, value: employee.id };
     });
-    console.log(employeesArr)
+
     inquirer
     .prompt([
         {
@@ -244,7 +244,6 @@ const updateEmployee = () => {
     ]).then((response) => updateInput(response.choice))
 };
 
-//TODO: there is a syntax error with the query.
 const updateInput = (id) => {
     const rolesArr = roles[0].map(function (role) {
         return { name: role.title, value: role.id };
@@ -271,7 +270,6 @@ const updateInput = (id) => {
         })
     })
 }
-
 
 //Initialize the app.
 start();
