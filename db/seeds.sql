@@ -10,6 +10,6 @@ VALUES ('Sales Guy',60000,1),
 
 INSERT INTO employee (first_name, last_name, manager_id, role_id)
 VALUES ('Shawn', 'Analla', 1, 4),
-('Gucci', 'Senpai', 1, 1),
+('Ronald', 'McDonald', 1, 1),
 ('Bill', 'Gates', 1, 2),
 ('Everyone', 'Else', 1, 3);
