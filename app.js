@@ -218,7 +218,6 @@ const addEmployee = () => {
             role_id: response.role_id
         };
         employees.push(newEmployee);
-        console.log(employees);
         db.query("INSERT INTO employee SET ?", newEmployee, (err, data) => {
             if (err) throw err;
             console.log(`${response.first_name} ${response.last_name} has been added as an employee.`)

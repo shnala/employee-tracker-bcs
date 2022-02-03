@@ -4,7 +4,7 @@
 
 ## Description
 
-Ever wanted a tool to help you organize your company and its swath of employees? Ever wanted to consolidate team information without having to laboriously trudge through excel, filling out each cell one-by-one? Then you are in luck, for the employee-tracker app that I have developed will allow you to avoid these hassles by generating these tables for you! Using the inquirer module, you will be walked through a series of prompts that take your inputs and render them into various pre-structured datasets. You may add to these datasets as much as you desire, and your inputs will save so that you may return to the app whenever you need it. I've learned much about the power of mysql and database applications in general by creating this app and am excited to integrate it with other skills I've acquired thus far, beyond the command line.
+Ever wanted a tool to help you organize your company and its swath of employees? Ever wanted to consolidate team information without having to laboriously trudge through Excel, filling out each cell one-by-one? Then you are in luck, for the employee-tracker app that I have developed will allow you to avoid these hassles by generating these tables for you! Using the inquirer module, you will be walked through a series of prompts that take your inputs and render them into various pre-structured datasets. You may add to these datasets as much as you desire, and your inputs will save so that you may return to the app whenever you need it. I've learned much about the power of mysql and database applications in general by creating this app and am excited to integrate it with other skills I've acquired thus far, beyond the command line.
 
 
 ## Table of Contents
@@ -17,14 +17,14 @@ Ever wanted a tool to help you organize your company and its swath of employees?
 ## Installation
 
 This is a command-line app, so there are some installation steps required before you can use it. 
-    1. Clone this repository.
-    2. Install the dependencies listed in the package.json by typing 'npm i' in the terminal.
-    3. Initialize the app by typing 'node app.js' in the terminal.
-    4. Log in to mysql and then run the schema.sql by typing 'source db/schema.sql'
-    5. (Optional) Seed the newly created datasets by typing 'source db/seeds.sql' if you want to experiment with how the app functions before adding any of your own data.
-    6. If you wish to clear the dataset entirely, just rune 'source db/schema.sql' again.
+1. Clone this repository.
+2. Install the dependencies listed in the package.json by typing 'npm i' in the terminal.
+3. Initialize the app by typing 'node app.js' in the terminal.
+4. Log in to mysql and then run the schema.sql by typing 'source db/schema.sql'
+5. (Optional) Seed the newly created datasets by typing 'source db/seeds.sql' if you want to experiment with how the app functions before adding any of your own data.
+6. If you wish to clear the dataset entirely, just rune 'source db/schema.sql' again.
 
-I've also uploaded a video walkthrough on how to install the app and how the app works. You can watch it here: []
+I've also uploaded a video walkthrough on how to install the app and how the app works. You can watch it here: [https://www.youtube.com/watch?v=oIqtvuLh26s]
 
 ## Usage
 
@@ -34,13 +34,16 @@ The user is able to add departments, roles and employees. As many of these can b
 
 When the user is finished, they should hit 'Finish' on the main menu to exit the app.
 
-![Image depicting the main menu of the app](assets/demo_01.PNG)
-![Image depicting structure of the 'roles' table when 'View All Roles' is selected](assets/demo_02.PNG)
-![Image depicting process for adding a new role](assets/demo_03.PNG)
+![Image depicting the main menu of the app](assets/images/demo-01.PNG)
 
-## Credits3
+![Image depicting structure of the 'roles' table when 'View All Roles' is selected](assets/images/demo-02.PNG)
+
+![Image depicting process for adding a new role](assets/images/demo-03.PNG)
+
+## Credits
 
 Inquirer: [https://www.npmjs.com/package/inquirer]
+
 MySQL: [https://www.npmjs.com/package/mysql]
 
 ## License
