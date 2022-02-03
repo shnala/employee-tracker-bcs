@@ -21,9 +21,6 @@ const start = async () => {
             throw err;
           }
           employees.push(data);
-        //   The console.log below will grab the second employee out of the employees array. For some reason, the array is nested inside of another array. Maybe do a map method so that this doesn't occur?
-        // Use this information to add create functionality for the 'update employee' option.
-          console.log(employees[0][1]);
     });
 
     //Pushes all currently listed roles into roles array.
@@ -128,8 +125,6 @@ const viewEmployees = () => {
     menu();
 };
 
-
-//Must use SET for db.query for some reason, (names) VALUES doesn't work.
 const addDepartment = () => {
     inquirer
     .prompt([
@@ -151,6 +146,11 @@ const addDepartment = () => {
 
 //TODO: On the third input, make a list of departments for the user to select from, and then use the corresponding integer id in the db.query.
 const addRole = () => {
+    const departmentArr = departments[0].map(function (department) {
+        return { name: department.name, value: department.id };
+    });
+    console.log(departmentArr);
+
     inquirer
     .prompt([
         {
@@ -164,8 +164,9 @@ const addRole = () => {
             name: 'salary'
         },
         {
-            type: 'input',
-            message: "Please enter the department id for this role (1: Sales, 2: Engineering)",
+            type: 'list',
+            message: "Please select the department that this role belongs in.",
+            choices: departmentArr,
             name: 'department_id'
         }
     ]).then((response) => {
@@ -183,6 +184,9 @@ const addRole = () => {
 };
 
 const addEmployee = () => {
+    const rolesArr = roles[0].map(function (role) {
+        return { name: role.title, value: role.id };
+    });
     inquirer
     .prompt([
         {
@@ -201,8 +205,9 @@ const addEmployee = () => {
             name: 'manager_id'
         },
         {
-            type: 'input',
-            message: "Please enter the role id for this employee (1: Sales Guy, 2: Software Engineer)",
+            type: 'list',
+            message: "Please select the role for this employee.",
+            choices: rolesArr,
             name: 'role_id'
         }
     ]).then((response) => {
@@ -222,39 +227,51 @@ const addEmployee = () => {
     })
 };
 
-//TODO: This function is incomplete. The choices for the prompt come back as 'undefined'
+//This function will feed an id value into the following function, which will select the appropriate employee so that their role can be updated.
 const updateEmployee = () => {
+    const employeesArr = employees[0].map(function (employee) {
+        return { name: employee.last_name, value: employee.id };
+    });
+    console.log(employeesArr)
     inquirer
     .prompt([
         {
             type: 'list',
             message: "Please select an employee to update.",
-            choices: employees[0], 
+            choices: employeesArr, 
             name: 'choice'
         }
-    ]).then((response) => {
-        console.log(response);
-        console.log(`Updating ${response}`);
-        updateInput(response);
-    })
+    ]).then((response) => updateInput(response.choice))
 };
 
-//TODO: this function is incomplete. First figure out the employees array so that an employee can be selected.
+//TODO: there is a syntax error with the query.
 const updateInput = (id) => {
-    console.log(id);
+    const rolesArr = roles[0].map(function (role) {
+        return { name: role.title, value: role.id };
+    });
+
     inquirer
     .prompt([
         {
-            type: 'input',
-            message: "Please enter the new role id for this employee.",
+            type: 'list',
+            message: "Please select the new role id for this employee.",
+            choices: rolesArr,
             name: 'role_id'
         }
-    ]).then((response) => {
-        console.log(`Updating ${response}`);
-        updateInput();
+    ])
+    .then((response) => {
+        const sql = `UPDATE employee SET role_id = ? WHERE id = ${id}`;
+        db.query(sql, [response.role_id], (err, data) => {
+            if (err) {
+            throw err;
+            } else {      
+            console.log('Employee updated. Select "View Employees" to view your changes.');
+            }
+            menu();
+        })
     })
-
 }
+
 
 //Initialize the app.
 start();
